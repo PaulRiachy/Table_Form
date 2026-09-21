@@ -92,6 +92,42 @@ button#saveBtn:not(:disabled):hover {
   background-color: #7a63ec;
 }
 
+.error-message {
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 5px;
+  min-height: 16px;
+}
+
+.edit-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.edit-btn:hover {
+  background-color: #0069d9;
+}
+
+.edit-save-btn {
+  background-color: #683bfb;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.edit-save-btn:hover {
+  background-color: #7a63ec;
+}
+
 /* Table */
 .table-container {
   margin-top: 35px;

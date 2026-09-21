@@ -21,11 +21,13 @@
       <div class="form-group">
         <label for="firstName">First Name</label>
         <input type="text" id="firstName" placeholder="Enter first name">
+        <p id="firstNameError" class="error-message"></p>
       </div>
 
       <div class="form-group">
         <label for="lastName">Last Name</label>
         <input type="text" id="lastName" placeholder="Enter last name">
+        <p id="lastNameError" class="error-message"></p>
       </div>
 
       <div class="form-group">
@@ -35,6 +37,7 @@
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
+        <p id="genderError" class="error-message"></p>
       </div>
 
       <button type="submit" id="saveBtn" disabled>Save</button>
@@ -45,10 +48,12 @@
       <table id="userTable">
         <thead>
           <tr>
+            <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Gender</th>
-            <th>Action</th>
+            <th>Edit</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody id="tableBody">
