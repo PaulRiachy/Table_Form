@@ -45,13 +45,14 @@
 
     <div class="table-container">
       <h3>Saved Users</h3>
+      <input type="text"  id="searchInput"  placeholder="Search by first or last name...">
       <table id="userTable">
         <thead>
           <tr>
             <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Gender</th>
+            <th data-sort="firstName">First Name <span class="sort-arrow"></span></th>
+            <th data-sort="lastName">Last Name <span class="sort-arrow"></span></th>
+            <th data-sort="gender">Gender <span class="sort-arrow"></span></th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>

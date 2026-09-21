@@ -7,15 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const tableBody = document.getElementById('tableBody');
   const emptyMsg = document.getElementById('emptyMsg');
   const timerDisplay = document.getElementById('timerDisplay');
+  const searchInput = document.getElementById('searchInput');
 
   const firstNameError = document.getElementById('firstNameError');
   const lastNameError = document.getElementById('lastNameError');
   const genderError = document.getElementById('genderError');
 
+  const sortHeaders = document.querySelectorAll('th[data-sort]');
+
   let users = [];
   let timeLeft = 60;
   let timerInterval = null;
   let editingIndex = null;
+
+  let sortField = null;
+  let sortDirection = 'asc';
 
   function loadUsers() {
     const saved = localStorage.getItem('users');
@@ -23,6 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved) {
       try {
         users = JSON.parse(saved);
+
+        users.forEach((user, index) => {
+          if (!user.displayId) {
+            user.displayId = index + 1;
+          }
+        });
+
+        saveUsers();
       }
       catch (e) {
         users = [];
@@ -31,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderTable();
   }
-
   function saveUsers() {
     localStorage.setItem('users', JSON.stringify(users));
   }
@@ -39,18 +52,51 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderTable() {
     tableBody.innerHTML = '';
 
-    if (users.length === 0) {
+    let displayedUsers = [...users];
+
+    const searchValue = searchInput.value.trim().toLowerCase();
+
+    if (searchValue !== '') {
+      displayedUsers = displayedUsers.filter(user =>
+        user.firstName.toLowerCase().includes(searchValue) ||
+        user.lastName.toLowerCase().includes(searchValue)
+      );
+    }
+
+    if (sortField !== null) {
+      displayedUsers.sort((a, b) => {
+        const valueA = a[sortField].toLowerCase();
+        const valueB = b[sortField].toLowerCase();
+
+        const result = valueA.localeCompare(valueB);
+
+        if (sortDirection === 'asc') {
+          return result;
+        }
+
+        return -result;
+      });
+    }
+
+    if (displayedUsers.length === 0) {
+      if (users.length === 0) {
+        emptyMsg.textContent = 'No users added yet.';
+      }
+      else {
+        emptyMsg.textContent = 'No users found.';
+      }
+
       emptyMsg.style.display = 'block';
       return;
     }
 
     emptyMsg.style.display = 'none';
 
-    users.forEach((user, index) => {
+    displayedUsers.forEach((user, index) => {
       const row = document.createElement('tr');
 
       row.innerHTML = `
-        <td>${index + 1}</td>
+        <td>${user.displayId}</td>
         <td>${user.firstName}</td>
         <td>${user.lastName}</td>
         <td>${user.gender}</td>
@@ -73,6 +119,24 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
 
       tableBody.appendChild(row);
+    });
+  }
+
+  function updateSortArrows() {
+    sortHeaders.forEach(header => {
+      const arrow = header.querySelector('.sort-arrow');
+
+      if (header.getAttribute('data-sort') === sortField) {
+        if (sortDirection === 'asc') {
+          arrow.textContent = '↑';
+        }
+        else {
+          arrow.textContent = '↓';
+        }
+      }
+      else {
+        arrow.textContent = '';
+      }
     });
   }
 
@@ -233,6 +297,32 @@ document.addEventListener('DOMContentLoaded', () => {
     input.addEventListener('change', checkInputs);
   });
 
+  searchInput.addEventListener('input', () => {
+    renderTable();
+  });
+
+  sortHeaders.forEach(header => {
+    header.addEventListener('click', () => {
+      const field = header.getAttribute('data-sort');
+
+      if (sortField === field) {
+        if (sortDirection === 'asc') {
+          sortDirection = 'desc';
+        }
+        else {
+          sortDirection = 'asc';
+        }
+      }
+      else {
+        sortField = field;
+        sortDirection = 'asc';
+      }
+      
+      updateSortArrows();
+      renderTable();
+    });
+  });
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -246,6 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const newUser = {
       id: crypto.randomUUID(),
+      displayId: users.length + 1,
       firstName: firstName.value.trim(),
       lastName: lastName.value.trim(),
       gender: gender.value

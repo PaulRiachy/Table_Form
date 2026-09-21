@@ -128,6 +128,41 @@ button#saveBtn:not(:disabled):hover {
   background-color: #7a63ec;
 }
 
+#searchInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+}
+
+#searchInput:focus {
+  border-color: #683bfb;
+  box-shadow: 0 0 0 2px rgba(104, 59, 251, 0.15);
+}
+
+#searchInput::placeholder {
+  color: #999;
+}
+
+th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+}
+
+th[data-sort]:hover {
+  background-color: #f0edff;
+}
+
+.sort-arrow {
+  margin-left: 5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
 /* Table */
 .table-container {
   margin-top: 35px;
