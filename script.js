@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const emptyMsg = document.getElementById('emptyMsg');
   const timerDisplay = document.getElementById('timerDisplay');
   const searchInput = document.getElementById('searchInput');
+  const clearAllBtn = document.getElementById('clearAllBtn');
+  const userCount = document.getElementById('userCount');
 
   const firstNameError = document.getElementById('firstNameError');
   const lastNameError = document.getElementById('lastNameError');
@@ -23,6 +25,36 @@ document.addEventListener('DOMContentLoaded', () => {
   let sortField = null;
   let sortDirection = 'asc';
 
+  clearAllBtn.addEventListener('click', () => {
+    users = [];
+
+    localStorage.removeItem('users');
+
+    resetTimer();
+
+    editingIndex = null;
+
+    form.reset();
+
+    firstNameError.textContent = '';
+    lastNameError.textContent = '';
+    genderError.textContent = '';
+
+    saveBtn.disabled = true;
+
+    searchInput.value = '';
+
+    sortField = null;
+    sortDirection = 'asc';
+
+    updateSortArrows();
+
+    renderTable();
+  });
+
+  function updateUserCount() {
+    userCount.textContent = `Total Users: ${users.length}`;
+  }
   function loadUsers() {
     const saved = localStorage.getItem('users');
 
@@ -51,6 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderTable() {
     tableBody.innerHTML = '';
+
+    updateUserCount();
 
     let displayedUsers = [...users];
 

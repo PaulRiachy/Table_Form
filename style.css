@@ -163,6 +163,35 @@ th[data-sort]:hover {
   font-weight: bold;
 }
 
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#userCount {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.clear-all-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.clear-all-btn:hover {
+  background-color: #c82333;
+}
+
 /* Table */
 .table-container {
   margin-top: 35px;

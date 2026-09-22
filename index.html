@@ -17,6 +17,8 @@
       Data clears in: <span id="timerDisplay">60</span>s 
     </div>
 
+    <!-- FORM -->
+
     <form id="userForm">
       <div class="form-group">
         <label for="firstName">First Name</label>
@@ -43,9 +45,17 @@
       <button type="submit" id="saveBtn" disabled>Save</button>
     </form>
 
+    <!-- TABLE AREA -->
+
     <div class="table-container">
       <h3>Saved Users</h3>
       <input type="text"  id="searchInput"  placeholder="Search by first or last name...">
+
+      <div class="table-controls">
+        <p id="userCount">Total Users: 0</p>
+        <button type="button" id="clearAllBtn" class="clear-all-btn">Clear All</button>
+      </div>
+
       <table id="userTable">
         <thead>
           <tr>
