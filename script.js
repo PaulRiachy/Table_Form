@@ -266,24 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
     timerDisplay.textContent = timeLeft;
   }
 
-  function checkInputs() {
-    const fnValue = firstName.value.trim();
-    const lnValue = lastName.value.trim();
-    const genderValue = gender.value;
-
-    const allFieldsFilled =
-      fnValue !== '' &&
-      lnValue !== '' &&
-      genderValue !== '';
-
-    if (editingIndex !== null) {
-      saveBtn.disabled = true;
-      return;
-    }
-
-    saveBtn.disabled = !allFieldsFilled;
-  }
-
   function validateInputs() {
     const fnValue = firstName.value.trim();
     const lnValue = lastName.value.trim();
@@ -295,14 +277,14 @@ document.addEventListener('DOMContentLoaded', () => {
       firstNameError.textContent = 'First Name is required.';
       valid = false;
     }
-    else if (!/^[A-Za-z\s]+$/.test(fnValue)) {
+    else if (fnValue.length < 2) {
       firstNameError.textContent =
-        'First Name can only contain letters and spaces.';
+        'Minimum 2 characters are required.';
       valid = false;
     }
-    else if (fnValue.length < 4) {
+    else if (/\d/.test(fnValue)) {
       firstNameError.textContent =
-        'First Name must be at least 4 characters.';
+        'Name cannot contain numbers.';
       valid = false;
     }
     else {
@@ -313,14 +295,14 @@ document.addEventListener('DOMContentLoaded', () => {
       lastNameError.textContent = 'Last Name is required.';
       valid = false;
     }
-    else if (!/^[A-Za-z\s]+$/.test(lnValue)) {
+    else if (lnValue.length < 2) {
       lastNameError.textContent =
-        'Last Name can only contain letters and spaces.';
+        'Minimum 2 characters are required.';
       valid = false;
     }
-    else if (lnValue.length < 3) {
+    else if (/\d/.test(lnValue)) {
       lastNameError.textContent =
-        'Last Name must be at least 3 characters.';
+        'Name cannot contain numbers.';
       valid = false;
     }
     else {
@@ -328,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (genderValue === '') {
-      genderError.textContent = 'Gender is required.';
+      genderError.textContent = 'Please select a gender.';
       valid = false;
     }
     else {
@@ -336,6 +318,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     return valid;
+  }
+
+  function checkInputs() {
+    if (editingIndex !== null) {
+      saveBtn.disabled = true;
+      return;
+    }
+
+    const valid = validateInputs();
+
+    saveBtn.disabled = !valid;
   }
 
   function normalizeName(name) {
