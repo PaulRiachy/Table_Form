@@ -57,6 +57,7 @@
         <p id="userCount">Total Users: 0</p>
         <button type="button" id="clearAllBtn" class="clear-all-btn">Clear All</button>
       </div>
+      <p id="showingCount">Showing 1-5 of 13 users</p> <br>
       <p id = "genderFilter"> Filter by gender: </p> <br>
       <div class="gender-filters">
         <button type="button" class="gender-filter active" data-gender="all">
@@ -71,7 +72,6 @@
           Female
         </button>
       </div>
-
       <table id="userTable">
         <thead>
           <tr>
@@ -87,6 +87,13 @@
             <!-- Table adds rows here -->
         </tbody>
       </table>
+      <div id="pagination" class="pagination">
+        <button type="button" id="prevPageBtn">Previous</button>
+
+        <div id="pageNumbers"></div>
+
+        <button type="button" id="nextPageBtn">Next</button>
+      </div>
       <p id="emptyMsg" class="empty-msg">No users added yet.</p>
     </div>
   </div>

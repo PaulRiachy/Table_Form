@@ -175,7 +175,7 @@ th[data-sort]:hover {
   margin-bottom: 10px;
 }
 
-#userCount, #genderFilter {
+#userCount, #genderFilter, #showingCount {
   margin: 0;
   color: #555;
   font-size: 14px;
@@ -327,4 +327,42 @@ th {
   border: none;
   color: white;
   font-weight: bold;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 15px;
+}
+
+.pagination button {
+  padding: 7px 12px;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  color: #333;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #e5e5e5;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#pageNumbers {
+  display: flex;
+  gap: 6px;
+}
+
+.page-number.active {
+  background-color: #683bfb;
+  color: white;
+  border-color: #683bfb;
 }

@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const deleteMessage = document.getElementById('deleteMessage');
   const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
   const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  const pagination = document.getElementById('pagination');
+  const prevPageBtn = document.getElementById('prevPageBtn');
+  const nextPageBtn = document.getElementById('nextPageBtn');
+  const pageNumbers = document.getElementById('pageNumbers');
+  const showingCount = document.getElementById('showingCount');
 
   const firstNameError = document.getElementById('firstNameError');
   const lastNameError = document.getElementById('lastNameError');
@@ -32,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let sortField = null;
   let sortDirection = 'asc';
   let selectedGender = 'all';
+  let currentPage = 1;
+  const usersPerPage = 5;
 
 
 
@@ -66,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateUserCount() {
     userCount.textContent = `Total Users: ${users.length}`;
   }
+
   function loadUsers() {
     const saved = localStorage.getItem('users');
 
@@ -88,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderTable();
   }
+
   function saveUsers() {
     localStorage.setItem('users', JSON.stringify(users));
   }
@@ -129,9 +138,35 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    if (displayedUsers.length === 0) {
+    const totalFilteredUsers = displayedUsers.length;
+    const totalPages = Math.ceil(totalFilteredUsers / usersPerPage);
+
+    if (totalPages === 0) {
+      currentPage = 1;
+    }
+    else if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+
+    const startIndex = (currentPage - 1) * usersPerPage;
+    const endIndex = startIndex + usersPerPage;
+
+    const paginatedUsers = displayedUsers.slice(startIndex, endIndex);
+
+    const showingStart = startIndex + 1;
+    const showingEnd = Math.min(
+      startIndex + paginatedUsers.length,
+      totalFilteredUsers
+    );
+
+    showingCount.textContent = `Showing ${showingStart}-${showingEnd} of ${totalFilteredUsers} users`;
+
+    if (totalFilteredUsers === 0) {
+      pagination.style.display = 'none';
+
       if (users.length === 0) {
         emptyMsg.textContent = 'No users added yet.';
+        showingCount.textContent = 'Showing 0-0 of 0 users.';
       }
       else {
         emptyMsg.textContent = 'No users found.';
@@ -143,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     emptyMsg.style.display = 'none';
 
-    displayedUsers.forEach((user, index) => {
+    paginatedUsers.forEach(user => {
       const row = document.createElement('tr');
 
       row.innerHTML = `
@@ -171,6 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       tableBody.appendChild(row);
     });
+
+    updatePagination(totalFilteredUsers);
   }
 
   function updateSortArrows() {
@@ -423,12 +460,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function updatePagination(totalUsers) {
+    const totalPages = Math.ceil(totalUsers / usersPerPage);
+
+    if (totalPages <= 1) {
+      pagination.style.display = 'none';
+      return;
+    }
+
+    pagination.style.display = 'flex';
+
+    prevPageBtn.disabled = currentPage === 1;
+    nextPageBtn.disabled = currentPage === totalPages;
+
+    pageNumbers.innerHTML = '';
+
+    for (let page = 1; page <= totalPages; page++) {
+      const button = document.createElement('button');
+
+      button.type = 'button';
+      button.textContent = page;
+      button.classList.add('page-number');
+
+      if (page === currentPage) {
+        button.classList.add('active');
+      }
+
+      button.addEventListener('click', () => {
+        currentPage = page;
+        renderTable();
+      });
+
+      pageNumbers.appendChild(button);
+    }
+  }
+
   [firstName, lastName, gender].forEach(input => {
     input.addEventListener('input', checkInputs);
     input.addEventListener('change', checkInputs);
   });
 
   searchInput.addEventListener('input', () => {
+    currentPage = 1;
     renderTable();
   });
 
@@ -448,7 +521,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sortField = field;
         sortDirection = 'asc';
       }
-      
+
+      currentPage = 1;
+
       updateSortArrows();
       renderTable();
     });
@@ -581,6 +656,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       button.classList.add('active');
 
+      currentPage = 1;
+
       renderTable();
     });
   });
@@ -591,6 +668,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
   confirmDeleteBtn.addEventListener('click', () => {
     deleteUser();
+  });
+
+  prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderTable();
+    }
+  });
+
+  nextPageBtn.addEventListener('click', () => {
+    const searchValue = searchInput.value.trim().toLowerCase();
+
+    let filteredUsers = [...users];
+
+    if (searchValue !== '') {
+      filteredUsers = filteredUsers.filter(user =>
+        user.firstName.toLowerCase().includes(searchValue) ||
+        user.lastName.toLowerCase().includes(searchValue)
+      );
+    }
+
+    if (selectedGender !== 'all') {
+      filteredUsers = filteredUsers.filter(user =>
+        user.gender === selectedGender
+      );
+    }
+
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderTable();
+    }
   });
 
   loadUsers();
