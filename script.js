@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearAllBtn = document.getElementById('clearAllBtn');
   const userCount = document.getElementById('userCount');
   const genderFilters = document.querySelectorAll('.gender-filter');
+  const deleteModal = document.getElementById('deleteModal');
+  const deleteMessage = document.getElementById('deleteMessage');
+  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 
   const firstNameError = document.getElementById('firstNameError');
   const lastNameError = document.getElementById('lastNameError');
@@ -23,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let timeLeft = 60;
   let timerInterval = null;
   let editingIndex = null;
+  let pendingDeleteId = null;
 
   let sortField = null;
   let sortDirection = 'asc';
@@ -351,6 +356,73 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function openDeleteConfirmation(id) {
+    const user = users.find(user => user.id === id);
+
+    if (!user) {
+      return;
+    }
+
+    pendingDeleteId = id;
+
+    deleteMessage.textContent =
+      `Are you sure you want to delete ${user.firstName} ${user.lastName}?`;
+
+    pauseTimer();
+
+    deleteModal.style.display = 'flex';
+  }
+
+  function closeDeleteConfirmation() {
+    pendingDeleteId = null;
+    deleteModal.style.display = 'none';
+
+    if (users.length > 0 && editingIndex === null) {
+      resumeTimer();
+    }
+  }
+
+  function deleteUser() {
+    if (pendingDeleteId === null) {
+      return;
+    }
+
+    const index = users.findIndex(user => user.id === pendingDeleteId);
+
+    if (index === -1) {
+      closeDeleteConfirmation();
+      return;
+    }
+
+    users.splice(index, 1);
+
+    saveUsers();
+
+    if (editingIndex === pendingDeleteId) {
+      editingIndex = null;
+
+      form.reset();
+
+      firstNameError.textContent = '';
+      lastNameError.textContent = '';
+      genderError.textContent = '';
+      duplicateError.textContent = '';
+
+      saveBtn.disabled = true;
+    }
+
+    closeDeleteConfirmation();
+
+    renderTable();
+
+    if (users.length === 0) {
+      resetTimer();
+    }
+    else if (editingIndex === null && timerInterval === null) {
+      resumeTimer();
+    }
+  }
+
   [firstName, lastName, gender].forEach(input => {
     input.addEventListener('input', checkInputs);
     input.addEventListener('change', checkInputs);
@@ -495,34 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.classList.contains('delete-btn')) {
       const id = e.target.getAttribute('data-id');
 
-      const index = users.findIndex(user => user.id === id);
-
-      if (index !== -1) {
-        users.splice(index, 1);
-
-        saveUsers();
-
-        if (editingIndex === id) {
-          editingIndex = null;
-
-          form.reset();
-
-          firstNameError.textContent = '';
-          lastNameError.textContent = '';
-          genderError.textContent = '';
-
-          saveBtn.disabled = true;
-        }
-
-        renderTable();
-
-        if (users.length === 0) {
-          resetTimer();
-        }
-        else if (editingIndex === null && timerInterval === null) {
-          resumeTimer();
-        }
-      }
+      openDeleteConfirmation(id);
     }
   });
 
@@ -538,6 +583,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       renderTable();
     });
+  });
+
+  cancelDeleteBtn.addEventListener('click', () => {
+    closeDeleteConfirmation();
+  });
+
+  confirmDeleteBtn.addEventListener('click', () => {
+    deleteUser();
   });
 
   loadUsers();
