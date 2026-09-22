@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const timerDisplay = document.getElementById('timerDisplay');
   const searchInput = document.getElementById('searchInput');
   const clearAllBtn = document.getElementById('clearAllBtn');
-  const userCount = document.getElementById('userCount');
   const genderFilters = document.querySelectorAll('.gender-filter');
   const deleteModal = document.getElementById('deleteModal');
   const deleteMessage = document.getElementById('deleteMessage');
@@ -20,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextPageBtn = document.getElementById('nextPageBtn');
   const pageNumbers = document.getElementById('pageNumbers');
   const showingCount = document.getElementById('showingCount');
+  const totalUsersStat = document.getElementById('totalUsersStat');
+  const maleUsersStat = document.getElementById('maleUsersStat');
+  const femaleUsersStat = document.getElementById('femaleUsersStat');
 
   const firstNameError = document.getElementById('firstNameError');
   const lastNameError = document.getElementById('lastNameError');
@@ -70,10 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTable();
   });
 
-  function updateUserCount() {
-    userCount.textContent = `Total Users: ${users.length}`;
-  }
-
   function loadUsers() {
     const saved = localStorage.getItem('users');
 
@@ -104,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderTable() {
     tableBody.innerHTML = '';
 
-    updateUserCount();
+    updateStatistics();
 
     let displayedUsers = [...users];
 
@@ -208,6 +206,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updatePagination(totalFilteredUsers);
+  }
+
+  function updateStatistics() {
+    const totalUsers = users.length;
+
+    const maleUsers = users.filter(user =>
+      user.gender === 'Male'
+    ).length;
+
+    const femaleUsers = users.filter(user =>
+      user.gender === 'Female'
+    ).length;
+
+    totalUsersStat.textContent = totalUsers;
+    maleUsersStat.textContent = maleUsers;
+    femaleUsersStat.textContent = femaleUsers;
   }
 
   function updateSortArrows() {

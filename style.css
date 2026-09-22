@@ -172,14 +172,14 @@ th[data-sort]:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-top: 12px;
+  margin-bottom: 18px;
 }
 
-#userCount, #genderFilter, #showingCount {
+#showingCount {
   margin: 0;
   color: #555;
   font-size: 14px;
-  font-weight: bold;
 }
 
 .clear-all-btn {
@@ -197,10 +197,21 @@ th[data-sort]:hover {
   background-color: #c82333;
 }
 
+#genderFilter {
+  margin: 0 0 8px 0;
+  color: #555;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.gender-filter-section {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
 .gender-filters {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
 }
 
 .gender-filter {
@@ -221,6 +232,40 @@ th[data-sort]:hover {
   background-color: #683bfb;
   color: white;
   border-color: #683bfb;
+}
+
+.statistics-dashboard {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  flex: 1;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.stat-card h4 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+@media (max-width: 600px) {
+  .statistics-dashboard {
+    flex-direction: column;
+  }
 }
 
 /* Table */

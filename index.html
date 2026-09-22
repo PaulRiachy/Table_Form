@@ -51,40 +51,62 @@
 
     <div class="table-container">
       <h3>Saved Users</h3>
-      <input type="text"  id="searchInput"  placeholder="Search by first or last name...">
+
+      <div class="statistics-dashboard">
+        <div class="stat-card">
+          <h4>Total Users</h4>
+          <p id="totalUsersStat">0</p>
+        </div>
+
+        <div class="stat-card">
+          <h4>Male</h4>
+          <p id="maleUsersStat">0</p>
+        </div>
+
+        <div class="stat-card">
+          <h4>Female</h4>
+          <p id="femaleUsersStat">0</p>
+        </div>
+      </div>
+
+      <input type="text" id="searchInput" placeholder="Search by first or last name...">
 
       <div class="table-controls">
-        <p id="userCount">Total Users: 0</p>
+        <p id="showingCount">Showing 0-0 of 0 users</p>
         <button type="button" id="clearAllBtn" class="clear-all-btn">Clear All</button>
       </div>
-      <p id="showingCount">Showing 1-5 of 13 users</p> <br>
-      <p id = "genderFilter"> Filter by gender: </p> <br>
-      <div class="gender-filters">
-        <button type="button" class="gender-filter active" data-gender="all">
-          All
-        </button>
 
-        <button type="button" class="gender-filter" data-gender="Male">
-          Male
-        </button>
+      <div class="gender-filter-section">
+        <p id="genderFilter">Filter by gender:</p>
 
-        <button type="button" class="gender-filter" data-gender="Female">
-          Female
-        </button>
+        <div class="gender-filters">
+          <button type="button" class="gender-filter active" data-gender="all">All</button>
+          
+          <button type="button" class="gender-filter" data-gender="Male">Male</button>
+
+          <button type="button" class="gender-filter" data-gender="Female">Female</button>
+        </div>
       </div>
       <table id="userTable">
         <thead>
           <tr>
             <th>ID</th>
-            <th data-sort="firstName">First Name <span class="sort-arrow"></span></th>
-            <th data-sort="lastName">Last Name <span class="sort-arrow"></span></th>
-            <th data-sort="gender">Gender <span class="sort-arrow"></span></th>
+            <th data-sort="firstName">
+              First Name <span class="sort-arrow"></span>
+            </th>
+            <th data-sort="lastName">
+              Last Name <span class="sort-arrow"></span>
+            </th>
+            <th data-sort="gender">
+              Gender <span class="sort-arrow"></span>
+            </th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>
+
         <tbody id="tableBody">
-            <!-- Table adds rows here -->
+          <!-- Table adds rows here -->
         </tbody>
       </table>
       <div id="pagination" class="pagination">
