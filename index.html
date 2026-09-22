@@ -43,7 +43,7 @@
       </div>
 
       <p id="duplicateError" class="error-message"></p>
-      
+
       <button type="submit" id="saveBtn" disabled>Save</button>
     </form>
 
@@ -56,6 +56,20 @@
       <div class="table-controls">
         <p id="userCount">Total Users: 0</p>
         <button type="button" id="clearAllBtn" class="clear-all-btn">Clear All</button>
+      </div>
+      <p id = "genderFilter"> Filter by gender: </p> <br>
+      <div class="gender-filters">
+        <button type="button" class="gender-filter active" data-gender="all">
+          All
+        </button>
+
+        <button type="button" class="gender-filter" data-gender="Male">
+          Male
+        </button>
+
+        <button type="button" class="gender-filter" data-gender="Female">
+          Female
+        </button>
       </div>
 
       <table id="userTable">

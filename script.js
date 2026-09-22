@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const clearAllBtn = document.getElementById('clearAllBtn');
   const userCount = document.getElementById('userCount');
+  const genderFilters = document.querySelectorAll('.gender-filter');
 
   const firstNameError = document.getElementById('firstNameError');
   const lastNameError = document.getElementById('lastNameError');
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let sortField = null;
   let sortDirection = 'asc';
+  let selectedGender = 'all';
 
 
 
@@ -98,6 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
       displayedUsers = displayedUsers.filter(user =>
         user.firstName.toLowerCase().includes(searchValue) ||
         user.lastName.toLowerCase().includes(searchValue)
+      );
+    }
+
+    if (selectedGender !== 'all') {
+      displayedUsers = displayedUsers.filter(user =>
+        user.gender === selectedGender
       );
     }
 
@@ -523,6 +531,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     }
+  });
+
+  genderFilters.forEach(button => {
+    button.addEventListener('click', () => {
+      selectedGender = button.getAttribute('data-gender');
+
+      genderFilters.forEach(filter => {
+        filter.classList.remove('active');
+      });
+
+      button.classList.add('active');
+
+      renderTable();
+    });
   });
 
   loadUsers();
