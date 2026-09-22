@@ -560,10 +560,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     duplicateError.textContent = '';
+    const nextDisplayId = users.length > 0
+    ? Math.max(...users.map(user => user.displayId || 0)) + 1
+    : 1;
 
     const newUser = {
       id: crypto.randomUUID(),
-      displayId: users.length + 1,
+      displayId: nextDisplayId,
       firstName: firstName.value.trim(),
       lastName: lastName.value.trim(),
       gender: gender.value
