@@ -99,6 +99,11 @@ button#saveBtn:not(:disabled):hover {
   min-height: 16px;
 }
 
+#duplicateError {
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
 .edit-btn {
   background-color: #007bff;
   color: white;

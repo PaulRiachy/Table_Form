@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const firstNameError = document.getElementById('firstNameError');
   const lastNameError = document.getElementById('lastNameError');
   const genderError = document.getElementById('genderError');
+  const duplicateError = document.getElementById('duplicateError');
 
   const sortHeaders = document.querySelectorAll('th[data-sort]');
 
@@ -24,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let sortField = null;
   let sortDirection = 'asc';
+
+
 
   clearAllBtn.addEventListener('click', () => {
     users = [];
@@ -39,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     firstNameError.textContent = '';
     lastNameError.textContent = '';
     genderError.textContent = '';
+    duplicateError.textContent = '';
 
     saveBtn.disabled = true;
 
@@ -326,6 +330,26 @@ document.addEventListener('DOMContentLoaded', () => {
     return valid;
   }
 
+  function normalizeName(name) {
+    return name.trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  function isDuplicateUser(firstNameValue, lastNameValue, currentId = null) {
+    const normalizedFirstName = normalizeName(firstNameValue);
+    const normalizedLastName = normalizeName(lastNameValue);
+
+    return users.some(user => {
+      if (currentId !== null && user.id === currentId) {
+        return false;
+      }
+
+      return (
+        normalizeName(user.firstName) === normalizedFirstName &&
+        normalizeName(user.lastName) === normalizedLastName
+      );
+    });
+  }
+
   [firstName, lastName, gender].forEach(input => {
     input.addEventListener('input', checkInputs);
     input.addEventListener('change', checkInputs);
@@ -367,6 +391,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!validateInputs()) {
       return;
     }
+
+    if (isDuplicateUser(firstName.value, lastName.value)) {
+      duplicateError.textContent = 'This user already exists';
+      return;
+    }
+
+    duplicateError.textContent = '';
 
     const newUser = {
       id: crypto.randomUUID(),
@@ -411,6 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
       firstNameError.textContent = '';
       lastNameError.textContent = '';
       genderError.textContent = '';
+      duplicateError.textContent = '';
 
       e.target.textContent = 'Save';
 
@@ -426,6 +458,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!validateInputs()) {
         return;
       }
+
+      if (isDuplicateUser(firstName.value, lastName.value, id)) {
+        duplicateError.textContent = 'This user already exists';
+        return;
+      }
+
+      duplicateError.textContent = '';
 
       const user = users.find(user => user.id === id);
 
